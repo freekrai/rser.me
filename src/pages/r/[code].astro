@@ -9,7 +9,9 @@ import { decodeSlug, getEmDashEntry, sanitizeHref } from "emdash";
 const code = decodeSlug(Astro.params.code);
 if (!code) return Astro.rewrite("/404");
 
-const { entry: link, cacheHint } = await getEmDashEntry("r", code);
+// The admin accepts slugs typed with a leading slash ("/blog"), so try both forms.
+let { entry: link, cacheHint } = await getEmDashEntry("r", code);
+if (!link) ({ entry: link, cacheHint } = await getEmDashEntry("r", `/${code}`));
 const url = link?.data.url ? sanitizeHref(link.data.url) : null;
 // sanitizeHref returns "#" for anything unsafe (javascript: and friends).
 if (!url || url === "#") return Astro.rewrite("/404");
