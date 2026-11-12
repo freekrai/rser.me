@@ -1,0 +1,516 @@
+{
+	"$schema": "https://emdashcms.com/seed.schema.json",
+	"version": "1",
+	"meta": {
+		"name": "rser.me",
+		"description": "Link-in-bio and short links for Roger Stringer",
+		"author": "Roger Stringer"
+	},
+	"settings": {
+		"title": "Roger Stringer",
+		"tagline": "Fractional CTO / AI Product Engineer sharing insights on coding, automation, 3D printing, and tech. Connect with me for tips, tools, and projects."
+	},
+	"blockTypes": [
+		{
+			"slug": "profile",
+			"label": "Profile header",
+			"description": "Avatar, name and bio at the top of a page",
+			"icon": "user-circle",
+			"category": "Link page",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{
+							"slug": "name",
+							"label": "Name",
+							"type": "string",
+							"required": true
+						},
+						{
+							"slug": "bio",
+							"label": "Bio",
+							"type": "text"
+						},
+						{
+							"slug": "avatar",
+							"label": "Avatar (falls back to the site logo)",
+							"type": "image"
+						}
+					]
+				}
+			]
+		},
+		{
+			"slug": "socials",
+			"label": "Social icons",
+			"description": "A row of social profile icons",
+			"icon": "share-network",
+			"category": "Link page",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{
+							"slug": "profiles",
+							"label": "Profiles",
+							"type": "repeater",
+							"validation": {
+								"subFields": [
+									{
+										"slug": "platform",
+										"label": "Platform",
+										"type": "select",
+										"required": true,
+										"options": [
+											"x",
+											"tiktok",
+											"threads",
+											"instagram",
+											"github",
+											"bluesky",
+											"youtube",
+											"mastodon",
+											"website"
+										]
+									},
+									{
+										"slug": "url",
+										"label": "URL",
+										"type": "url",
+										"required": true
+									},
+									{
+										"slug": "label",
+										"label": "Label",
+										"type": "string"
+									}
+								]
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"slug": "heading",
+			"label": "Section heading",
+			"description": "A small heading that starts a group of links",
+			"icon": "text-h",
+			"category": "Link page",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{
+							"slug": "title",
+							"label": "Heading",
+							"type": "string",
+							"required": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"slug": "link",
+			"label": "Link",
+			"description": "A link card. Give it a short slug to make rser.me/<slug> redirect to it.",
+			"icon": "link",
+			"category": "Link page",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{
+							"slug": "title",
+							"label": "Title",
+							"type": "string",
+							"required": true
+						},
+						{
+							"slug": "url",
+							"label": "Destination URL",
+							"type": "string",
+							"required": true
+						},
+						{
+							"slug": "description",
+							"label": "Description",
+							"type": "text"
+						},
+						{
+							"slug": "thumbnail",
+							"label": "Thumbnail",
+							"type": "image"
+						},
+						{
+							"slug": "badge",
+							"label": "Badge (e.g. a price)",
+							"type": "string"
+						},
+						{
+							"slug": "short_slug",
+							"label": "Short link slug (rser.me/…)",
+							"type": "string"
+						},
+						{
+							"slug": "hidden",
+							"label": "Hide on page (short link only)",
+							"type": "boolean",
+							"defaultValue": false
+						}
+					]
+				}
+			]
+		},
+		{
+			"slug": "text",
+			"label": "Text",
+			"description": "A paragraph of rich text",
+			"icon": "paragraph",
+			"category": "Link page",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{
+							"slug": "body",
+							"label": "Body",
+							"type": "portableText",
+							"required": true
+						}
+					]
+				}
+			]
+		},
+		{
+			"slug": "form",
+			"label": "Contact form",
+			"description": "Embed a form built under Plugins > Forms",
+			"icon": "envelope-simple",
+			"category": "Link page",
+			"currentVersion": 1,
+			"versions": [
+				{
+					"version": 1,
+					"fields": [
+						{
+							"slug": "title",
+							"label": "Heading",
+							"type": "string"
+						},
+						{
+							"slug": "intro",
+							"label": "Intro text",
+							"type": "text"
+						},
+						{
+							"slug": "form",
+							"label": "Form slug (from Plugins > Forms)",
+							"type": "string",
+							"required": true
+						}
+					]
+				}
+			]
+		}
+	],
+	"collections": [
+		{
+			"slug": "pages",
+			"label": "Pages",
+			"labelSingular": "Page",
+			"urlPattern": "/{slug}",
+			"description": "The page with slug \"home\" is the home page.",
+			"supports": [
+				"drafts",
+				"revisions",
+				"seo"
+			],
+			"fields": [
+				{
+					"slug": "title",
+					"label": "Title",
+					"type": "string",
+					"required": true
+				},
+				{
+					"slug": "layout",
+					"label": "Blocks",
+					"type": "blocks",
+					"validation": {
+						"allowedTypes": [
+							"profile",
+							"socials",
+							"heading",
+							"link",
+							"text",
+							"form"
+						],
+						"maxItems": 100
+					}
+				}
+			]
+		}
+	],
+	"content": {
+		"pages": [
+			{
+				"id": "home",
+				"slug": "home",
+				"status": "published",
+				"data": {
+					"title": "Home",
+					"layout": [
+						{
+							"_type": "profile",
+							"_version": 1,
+							"_key": "profile-1",
+							"name": "Roger Stringer",
+							"bio": "Fractional CTO / AI Product Engineer sharing insights on coding, automation, 3D printing, and tech. Connect with me for tips, tools, and projects."
+						},
+						{
+							"_type": "socials",
+							"_version": 1,
+							"_key": "socials-2",
+							"profiles": [
+								{
+									"platform": "x",
+									"url": "https://x.com/freekrai",
+									"label": "X"
+								},
+								{
+									"platform": "tiktok",
+									"url": "https://tiktok.com/@knowmad250",
+									"label": "TikTok"
+								},
+								{
+									"platform": "threads",
+									"url": "https://www.threads.com/@freekrai",
+									"label": "Threads"
+								},
+								{
+									"platform": "instagram",
+									"url": "https://instagram.com/freekrai",
+									"label": "Instagram"
+								},
+								{
+									"platform": "github",
+									"url": "https://github.com/freekrai",
+									"label": "GitHub"
+								},
+								{
+									"platform": "website",
+									"url": "https://rogerstringer.com",
+									"label": "Website"
+								}
+							]
+						},
+						{
+							"_type": "heading",
+							"_version": 1,
+							"_key": "heading-3",
+							"title": "My Projects / Sites"
+						},
+						{
+							"_type": "link",
+							"_version": 1,
+							"_key": "link-4",
+							"title": "My Blog",
+							"url": "https://rogerstringer.com/",
+							"short_slug": "blog",
+							"hidden": false,
+							"description": "AI Product Engineer building products, automating with AI, and writing about it.",
+							"thumbnail": {
+								"$media": {
+									"url": "https://ugc.production.linktr.ee/18604c37-216e-426b-8b7c-6d6693d93e9d_android-chrome-512x512.png?io=true&size=thumbnail-stack_v1_0",
+									"alt": "rogerstringer.com logo",
+									"filename": "blog.jpg"
+								}
+							}
+						},
+						{
+							"_type": "link",
+							"_version": 1,
+							"_key": "link-5",
+							"title": "Talk to my sites: chat for your sites",
+							"url": "https://talktomysites.com/",
+							"short_slug": "talk",
+							"hidden": false,
+							"description": "TalkToMySites reads your sitemap, indexes every page, and gives you one script tag. Visitors ask in plain language and get answers from your own content, with links to the pages they came from.",
+							"thumbnail": {
+								"$media": {
+									"url": "https://ugc.production.linktr.ee/48f9d6e0-6c9b-47b1-a6fc-d3ec311d01ce_linktree-cropped-ADB412CE-3188-4B68-A5C7-2B74C4890D2C.jpeg?io=true&size=thumbnail-stack_v1_0",
+									"alt": "TalkToMySites logo",
+									"filename": "talktomysites.jpg"
+								}
+							}
+						},
+						{
+							"_type": "link",
+							"_version": 1,
+							"_key": "link-6",
+							"title": "Get Butters: event tracking dashboard",
+							"url": "https://getbutters.com/",
+							"short_slug": "butters",
+							"hidden": false,
+							"description": "Track all your events in one place.",
+							"thumbnail": {
+								"$media": {
+									"url": "https://ugc.production.linktr.ee/127d85bf-d47f-4b98-95c0-f24abb454710_01M367V4F5VCKM2YVT78AAQJZ2.png?io=true&size=thumbnail-stack_v1_0",
+									"alt": "Get Butters logo",
+									"filename": "butters.jpg"
+								}
+							}
+						},
+						{
+							"_type": "link",
+							"_version": 1,
+							"_key": "link-7",
+							"title": "Data McFly",
+							"url": "https://datamcfly.com/",
+							"short_slug": "datamcfly",
+							"hidden": false,
+							"description": "Senior technical leadership, hands-on delivery, and AI-native engineering for startups and scaling businesses, exactly when you need it and only for as long as you do.",
+							"thumbnail": {
+								"$media": {
+									"url": "https://ugc.production.linktr.ee/aaa06b89-dcf5-4087-b34f-1bfb2ccf7545_linktree-cropped-E35B1B76-5FEF-4D93-801D-948EDDDA464F.jpeg?io=true&size=thumbnail-stack_v1_0",
+									"alt": "Data McFly logo",
+									"filename": "datamcfly.jpg"
+								}
+							}
+						},
+						{
+							"_type": "heading",
+							"_version": 1,
+							"_key": "heading-8",
+							"title": "My Stuff"
+						},
+						{
+							"_type": "link",
+							"_version": 1,
+							"_key": "link-9",
+							"title": "About Me",
+							"url": "/about",
+							"short_slug": "me",
+							"hidden": false
+						},
+						{
+							"_type": "link",
+							"_version": 1,
+							"_key": "link-10",
+							"title": "Schedule a 15-minute meeting with Roger",
+							"url": "https://cal.com/datamcfly/15min?overlayCalendar=true",
+							"short_slug": "meet",
+							"hidden": false,
+							"description": "15 min meeting",
+							"thumbnail": {
+								"$media": {
+									"url": "https://ugc.production.linktr.ee/5ebbdbb9-2bc9-44c2-8215-6d4031e5bfdb_image.png?io=true&size=thumbnail-stack_v1_0",
+									"alt": "Calendar",
+									"filename": "meet.jpg"
+								}
+							}
+						},
+						{
+							"_type": "link",
+							"_version": 1,
+							"_key": "link-11",
+							"title": "Buy Me a Coffee",
+							"url": "https://buymeacoffee.com/codedgeekery",
+							"short_slug": "coffee",
+							"hidden": false
+						},
+						{
+							"_type": "form",
+							"_version": 1,
+							"_key": "form-contact",
+							"title": "Get In Touch",
+							"intro": "Send me a note and I'll get back to you.",
+							"form": "contact"
+						},
+						{
+							"_type": "heading",
+							"_version": 1,
+							"_key": "heading-12",
+							"title": "Gadgets"
+						},
+						{
+							"_type": "link",
+							"_version": 1,
+							"_key": "link-13",
+							"title": "Try the PLAUD NotePin!",
+							"url": "https://www.amazon.com/dp/B0CZX48H2Z?tag=phpprof-20&linkCode=sl1",
+							"short_slug": "plaud",
+							"hidden": false,
+							"thumbnail": {
+								"$media": {
+									"url": "https://ugc.production.linktr.ee/48cd09c7-924d-417a-b3f6-96d38130e921_31A-I-Wc8xL.-SL500-.jpeg?io=true&size=thumbnail-stack_v1_0",
+									"alt": "PLAUD NotePin",
+									"filename": "plaud.jpg"
+								}
+							},
+							"badge": "$159"
+						}
+					]
+				}
+			},
+			{
+				"id": "about",
+				"slug": "about",
+				"status": "published",
+				"data": {
+					"title": "About Me",
+					"layout": [
+						{
+							"_type": "heading",
+							"_version": 1,
+							"_key": "heading-14",
+							"title": "About me"
+						},
+						{
+							"_type": "text",
+							"_version": 1,
+							"_key": "text-15",
+							"body": [
+								{
+									"_type": "block",
+									"style": "normal",
+									"children": [
+										{
+											"_type": "span",
+											"text": "Hi there! I'm Roger Stringer, a Product Engineer, Author, Foodie, and Speaker living in Penticton, British Columbia. I write about tech at rogerstringer.com and codedgeekery.com, and I'm an open source author."
+										}
+									]
+								}
+							]
+						},
+						{
+							"_type": "text",
+							"_version": 1,
+							"_key": "text-16",
+							"body": [
+								{
+									"_type": "block",
+									"style": "normal",
+									"children": [
+										{
+											"_type": "span",
+											"text": "These days I work as a Fractional CTO and AI Product Engineer, sharing what I learn about coding, automation, 3D printing, and tech."
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		]
+	}
+}

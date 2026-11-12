@@ -1,0 +1,28 @@
+---
+import { sanitizeHref } from "emdash";
+import SocialIcon from "../SocialIcon.astro";
+
+const { value } = Astro.props as {
+	value: { profiles?: { platform: string; url: string; label?: string }[] };
+};
+const profiles = value.profiles ?? [];
+---
+
+{
+	profiles.length > 0 && (
+		<nav aria-label="Social profiles" class="mt-6 flex flex-wrap justify-center gap-4">
+			{profiles.map((p) => (
+				<a
+					href={sanitizeHref(p.url)}
+					class="text-primary transition-colors hover:text-primary/70"
+					target="_blank"
+					rel="me noopener noreferrer"
+					title={p.label || p.platform}
+				>
+					<span class="sr-only">{p.label || p.platform}</span>
+					<SocialIcon platform={p.platform} class="size-6" />
+				</a>
+			))}
+		</nav>
+	)
+}

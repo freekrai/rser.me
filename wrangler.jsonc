@@ -1,0 +1,37 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "rser",
+	"main": "./src/worker.ts",
+	"compatibility_date": "2026-02-24",
+	"compatibility_flags": ["nodejs_compat"],
+	// Production domain. Wrangler creates the DNS record for this custom domain.
+	"routes": [
+		{ "pattern": "rser.me", "custom_domain": true },
+		{ "pattern": "www.rser.me", "custom_domain": true },
+	],
+	"vars": {
+		// Setup, passkeys, sitemaps and email links use this origin.
+		"EMDASH_SITE_URL": "https://rser.me",
+	},
+	"observability": { "enabled": true },
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "rser",
+		},
+	],
+	"r2_buckets": [
+		{
+			"binding": "MEDIA",
+			"bucket_name": "rser-media",
+		},
+	],
+	// Cloudflare Email Sending, used by the cloudflareEmail() plugin for form notifications
+	"send_email": [{ "name": "EMAIL" }],
+	// Sandboxed plugins require Worker Loader, available on Workers paid plans. Uncomment to enable:
+	// "worker_loaders": [{ "binding": "LOADER" }],
+	// General maintenance cron trigger
+	"triggers": {
+		"crons": ["* * * * *"],
+	},
+}

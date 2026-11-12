@@ -1,0 +1,5 @@
+---
+const { value } = Astro.props as { value: { title: string } };
+---
+
+<h2 class="mb-2 mt-8 text-lg font-semibold text-primary">{value.title}</h2>

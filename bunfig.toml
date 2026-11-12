@@ -1,0 +1,5 @@
+[install]
+# Supply-chain hardening (carried over from the template's pnpm config):
+# wait 24h before installing brand-new releases, except EmDash packages.
+minimumReleaseAge = 86400
+minimumReleaseAgeExcludes = ["emdash", "@emdash-cms/cloudflare", "@emdash-cms/admin"]

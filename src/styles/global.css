@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@import "@emdash-cms/plugin-forms/styles";
+@plugin "daisyui" {
+	themes: light --default, dark --prefersdark;
+}
+
+/* Matches the linktree-astro look: blue-50 page, blue-500 accents, white pills. */
+@plugin "daisyui/theme" {
+	name: "light";
+	default: true;
+	--color-base-100: #ffffff;
+	--color-base-200: oklch(97% 0.014 254.604); /* blue-50 */
+	--color-base-300: oklch(93.2% 0.032 255.585); /* blue-100 */
+	--color-base-content: oklch(27.8% 0.033 256.848); /* gray-800 */
+	--color-primary: oklch(62.3% 0.214 259.815); /* blue-500 */
+	--color-primary-content: #ffffff;
+	--radius-box: 1rem;
+}
+
+@plugin "daisyui/theme" {
+	name: "dark";
+	prefersdark: true;
+	--color-base-200: oklch(20% 0.03 260);
+	--color-primary: oklch(70.7% 0.165 254.624); /* blue-400 */
+	--color-primary-content: oklch(20% 0.04 260);
+	--radius-box: 1rem;
+}
+
+@theme inline {
+	--font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Theme the forms plugin's markup with daisyUI tokens */
+.ec-form {
+	--ec-form-gap: 1rem;
+	--ec-form-field-border: var(--border) solid var(--color-base-300);
+	--ec-form-field-radius: var(--radius-field);
+	--ec-form-field-padding: 0.5rem 0.75rem;
+	--ec-form-field-bg: var(--color-base-100);
+	--ec-form-error-color: var(--color-error);
+	--ec-form-required-color: var(--color-error);
+	--ec-form-help-color: color-mix(in oklab, var(--color-base-content) 60%, transparent);
+	--ec-form-submit-bg: var(--color-primary);
+	--ec-form-submit-color: var(--color-primary-content);
+	--ec-form-submit-radius: 9999px;
+	--ec-form-submit-padding: 0.625rem 1.5rem;
+}

@@ -1,0 +1,39 @@
+---
+import { getEmDashEntry, getSeoMeta, decodeSlug, getSiteSettings } from "emdash";
+import Base from "../layouts/Base.astro";
+import PageBlocks from "../components/PageBlocks.astro";
+import { resolveStarterSiteIdentity } from "../utils/site-identity";
+import { resolveShortLink } from "../utils/short-links";
+
+// rser.me/<slug> resolves in this order:
+//   1. a published Page with that slug  -> rendered (e.g. /about)
+//   2. a Link block whose "short link slug" matches -> 302 redirect
+//   3. otherwise 404
+const slug = decodeSlug(Astro.params.slug);
+if (!slug) return Astro.rewrite("/404");
+if (slug === "home") return Astro.redirect("/", 301);
+
+const { entry: page, cacheHint } = await getEmDashEntry("pages", slug);
+if (!page) {
+	const destination = await resolveShortLink(slug);
+	if (destination) {
+		return new Response(null, { status: 302, headers: { Location: destination, "Cache-Control": "no-store" } });
+	}
+	return Astro.rewrite("/404");
+}
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+const { siteTitle } = resolveStarterSiteIdentity(await getSiteSettings());
+const seo = getSeoMeta(page, { siteTitle, siteUrl: Astro.url.origin, path: Astro.url.pathname.replace(/\/$/, "") });
+---
+
+<Base
+	title={seo.title}
+	pageTitle={seo.ogTitle}
+	description={seo.description}
+	canonical={seo.canonical}
+	content={{ collection: "pages", id: page.data.id, slug }}
+>
+	<a href="/" class="btn btn-ghost btn-sm mb-4">&larr; All links</a>
+	<PageBlocks blocks={page.data.layout} currentSlug={slug} />
+</Base>

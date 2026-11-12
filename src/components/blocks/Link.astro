@@ -1,0 +1,39 @@
+---
+import { sanitizeHref } from "emdash";
+import { Image } from "emdash/ui";
+
+const { value } = Astro.props as {
+	value: {
+		title: string;
+		url: string;
+		description?: string;
+		thumbnail?: any;
+		badge?: string;
+		hidden?: boolean;
+	};
+};
+const href = sanitizeHref(value.url);
+const external = /^https?:\/\//i.test(value.url);
+---
+
+{
+	!value.hidden && (
+		<a
+			href={href}
+			target={external ? "_blank" : undefined}
+			rel={external ? "noopener noreferrer" : undefined}
+			title={value.description || undefined}
+			class="relative mb-4 flex min-h-14 items-center justify-center rounded-full border border-primary/80 bg-base-100 px-14 py-4 text-center shadow-[0_0_5px_color-mix(in_oklab,var(--color-primary)_25%,transparent)] transition hover:border-primary hover:bg-base-200 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+		>
+			{value.thumbnail && (
+				<span class="absolute left-2 top-1/2 size-10 -translate-y-1/2 overflow-hidden rounded-full">
+					<Image image={value.thumbnail} width={80} height={80} class="size-10 object-cover" />
+				</span>
+			)}
+			<span class="font-medium">{value.title}</span>
+			{value.badge && (
+				<span class="badge badge-sm badge-soft badge-primary absolute right-3 top-1/2 -translate-y-1/2">{value.badge}</span>
+			)}
+		</a>
+	)
+}

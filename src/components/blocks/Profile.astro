@@ -1,0 +1,32 @@
+---
+import { getSiteSettings } from "emdash";
+import { Image } from "emdash/ui";
+
+const { value } = Astro.props as { value: { name: string; bio?: string; avatar?: any } };
+const settings = await getSiteSettings();
+const fallbackSrc = settings.logo?.url ?? "/avatar.jpg";
+---
+
+<header class="text-center">
+	{
+		value.avatar ? (
+			<Image
+				image={value.avatar}
+				width={192}
+				height={192}
+				priority
+				class="mx-auto mb-4 size-24 rounded-full border-2 border-primary/25 object-cover shadow-sm"
+			/>
+		) : (
+			<img
+				src={fallbackSrc}
+				alt={value.name}
+				width="192"
+				height="192"
+				class="mx-auto mb-4 size-24 rounded-full border-2 border-primary/25 object-cover shadow-sm"
+			/>
+		)
+	}
+	<h1 class="text-2xl font-bold">{value.name}</h1>
+	{value.bio && <p class="mt-1 text-balance text-base-content/70">{value.bio}</p>}
+</header>

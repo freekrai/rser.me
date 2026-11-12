@@ -1,0 +1,11 @@
+---
+import { Form } from "@emdash-cms/plugin-forms/ui";
+import DialogPill from "../DialogPill.astro";
+
+// Embeds a form built under Plugins > Forms as a pill that opens a dialog.
+// Hidden until a form with this slug exists. /#<slug> opens it directly.
+const { value } = Astro.props as { value: { form: string; title?: string; intro?: string } };
+const id = value.form.replace(/[^a-z0-9-]/gi, "-").toLowerCase() || "contact";
+---
+
+<DialogPill id={id} label={value.title || "Get In Touch"} intro={value.intro} icon="mail"><Form id={value.form} /></DialogPill>

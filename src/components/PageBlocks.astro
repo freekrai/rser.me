@@ -1,0 +1,66 @@
+---
+import { getEmDashEntry } from "emdash";
+import { Blocks } from "emdash/ui";
+import DialogPill from "./DialogPill.astro";
+import ContactForm from "./blocks/ContactForm.astro";
+import Heading from "./blocks/Heading.astro";
+import Link from "./blocks/Link.astro";
+import Profile from "./blocks/Profile.astro";
+import Socials from "./blocks/Socials.astro";
+import Text from "./blocks/Text.astro";
+
+interface Props {
+	blocks: unknown[] | null | undefined;
+	/** Slug of the page being rendered (avoids a page opening itself in a dialog). */
+	currentSlug?: string;
+	/** Set when rendering inside a dialog: page links render as plain links. */
+	nested?: boolean;
+}
+
+// One component per block type defined in seed/seed.json (blockTypes).
+const components = {
+	profile: Profile,
+	socials: Socials,
+	heading: Heading,
+	link: Link,
+	text: Text,
+	form: ContactForm,
+};
+
+type AnyBlock = { _type: string; _key: string; [k: string]: any };
+const { blocks, currentSlug, nested = false } = Astro.props;
+const list = (blocks ?? []) as AnyBlock[];
+
+// A Link block pointing at one of our own pages (e.g. "/about") opens that page
+// in a dialog instead of navigating. Resolve those pages up front.
+const pageSlugOf = (b: AnyBlock) => {
+	if (nested || b._type !== "link" || b.hidden || typeof b.url !== "string") return null;
+	const m = /^\/([a-z0-9][a-z0-9_-]*)\/?$/i.exec(b.url.trim());
+	return m && m[1] !== currentSlug && m[1] !== "home" ? m[1] : null;
+};
+const dialogPages = new Map<string, AnyBlock[]>();
+await Promise.all(
+	[...new Set(list.map(pageSlugOf).filter((s): s is string => !!s))].map(async (slug) => {
+		const { entry } = await getEmDashEntry("pages", slug);
+		if (entry) dialogPages.set(slug, (entry.data.layout ?? []) as AnyBlock[]);
+	}),
+);
+
+// Inside a dialog the link's title is the dialog title, so drop a leading
+// heading block on the page to avoid showing it twice.
+const dialogBody = (layout: AnyBlock[]) => (layout[0]?._type === "heading" ? layout.slice(1) : layout);
+---
+
+{
+	list.map((block) => {
+		const slug = pageSlugOf(block);
+		const layout = slug ? dialogPages.get(slug) : undefined;
+		return layout ? (
+			<DialogPill id={slug!} label={block.title} href={block.url} thumbnail={block.thumbnail}>
+				<Astro.self blocks={dialogBody(layout)} currentSlug={slug!} nested />
+			</DialogPill>
+		) : (
+			<Blocks value={[block] as any} components={components as any} />
+		);
+	})
+}

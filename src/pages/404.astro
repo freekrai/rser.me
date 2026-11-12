@@ -1,0 +1,14 @@
+---
+import Base from "../layouts/Base.astro";
+Astro.response.status = 404;
+---
+
+<Base title="Not Found">
+	<div class="card card-border bg-base-100 text-center">
+		<div class="card-body items-center">
+			<h1 class="card-title text-2xl">Link not found</h1>
+			<p class="text-base-content/70">That short link doesn't exist (or isn't published yet).</p>
+			<a href="/" class="btn btn-primary mt-2">See all links</a>
+		</div>
+	</div>
+</Base>

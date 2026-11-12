@@ -1,0 +1,100 @@
+---
+import { getSiteSettingsWithCacheHint } from "emdash";
+import { EmDashHead, EmDashBodyStart, EmDashBodyEnd } from "emdash/ui";
+import { createPublicPageContext } from "emdash/page";
+import { Font } from "astro:assets";
+import { resolveStarterSiteIdentity } from "../utils/site-identity";
+import "../styles/global.css";
+
+interface Props {
+	title: string;
+	pageTitle?: string | null;
+	description?: string | null;
+	image?: string | null;
+	canonical?: string | null;
+	/** Pass content reference for plugin page contributions on content pages */
+	content?: { collection: string; id: string; slug?: string | null };
+}
+
+const { title, pageTitle, description, image, canonical, content } = Astro.props;
+const settingsResult = await getSiteSettingsWithCacheHint();
+if (Astro.cache?.enabled) Astro.cache.set(settingsResult.cacheHint);
+
+const { siteTitle, siteTagline } = resolveStarterSiteIdentity(settingsResult.data);
+const fullTitle = title === siteTitle || title.endsWith(` | ${siteTitle}`) ? title : `${title} | ${siteTitle}`;
+
+const pageCtx = createPublicPageContext({
+	Astro,
+	kind: content ? "content" : "custom",
+	pageType: "website",
+	title: fullTitle,
+	pageTitle: pageTitle ?? title,
+	description: description ?? siteTagline,
+	canonical,
+	image,
+	content,
+	siteName: siteTitle,
+});
+
+const clouds = [
+	{ top: "10%", left: "20%", rotate: "45deg" },
+	{ top: "30%", left: "50%", rotate: "90deg" },
+	{ top: "50%", left: "70%", rotate: "135deg" },
+	{ top: "70%", left: "30%", rotate: "180deg" },
+	{ top: "90%", left: "80%", rotate: "225deg" },
+	{ top: "20%", left: "40%", rotate: "270deg" },
+	{ top: "40%", left: "60%", rotate: "315deg" },
+	{ top: "60%", left: "20%", rotate: "360deg" },
+	{ top: "80%", left: "50%", rotate: "405deg" },
+	{ top: "10%", left: "70%", rotate: "450deg" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{fullTitle}</title>
+		<EmDashHead page={pageCtx} />
+		<Font cssVariable="--font-geist-sans" preload />
+		<!-- Analytics -->
+		<script is:inline defer src="https://lulu.datamcfly.com/lulu.js" data-website-id="96f5c59c-f133-4818-80ee-0fa8a9a469d1"></script>
+		<!-- Datastar (pinned) for server-driven partials via SSE -->
+		<script is:inline type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@v1.0.5/bundles/datastar.js"></script>
+	</head>
+	<body class="min-h-dvh bg-base-200 font-sans antialiased">
+		<EmDashBodyStart page={pageCtx} />
+		<div class="relative min-h-dvh overflow-hidden">
+			<!-- Decorative backdrop: soft waves + scattered outline clouds (from linktree-astro) -->
+			<div class="pointer-events-none absolute inset-0 z-0 text-primary" aria-hidden="true">
+				<svg class="absolute h-full w-full" viewBox="0 0 1440 800" preserveAspectRatio="none">
+					<path fill="currentColor" fill-opacity="0.1" d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,165.3C672,181,768,235,864,250.7C960,267,1056,245,1152,250.7C1248,256,1344,288,1392,304L1440,320L1440,320L0,320Z" />
+					<path fill="currentColor" fill-opacity="0.05" d="M0,416L48,432C96,448,192,480,288,506.7C384,533,480,555,576,538.7C672,523,768,469,864,453.3C960,437,1056,459,1152,453.3C1248,448,1344,416,1392,400L1440,384L1440,320L0,320Z" />
+				</svg>
+				<div class="absolute inset-0 opacity-20">
+					{
+						clouds.map((c) => (
+							<svg
+								class="absolute size-[250px]"
+								style={`top:${c.top};left:${c.left};transform:rotate(${c.rotate})`}
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="0.5"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+							</svg>
+						))
+					}
+				</div>
+			</div>
+			<main class="relative z-10 mx-auto w-full max-w-md px-4 py-8 sm:py-12">
+				<slot />
+			</main>
+		</div>
+		<EmDashBodyEnd page={pageCtx} />
+	</body>
+</html>

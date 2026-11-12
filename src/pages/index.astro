@@ -1,0 +1,22 @@
+---
+import { getEmDashEntry } from "emdash";
+import Base from "../layouts/Base.astro";
+import PageBlocks from "../components/PageBlocks.astro";
+
+// The home page is the Page with slug "home", built from blocks in the admin.
+const { entry: page, cacheHint } = await getEmDashEntry("pages", "home");
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+---
+
+<Base title={page?.data.title === "Home" || !page ? "Roger Stringer" : page.data.title} content={page ? { collection: "pages", id: page.data.id, slug: "home" } : undefined}>
+	{
+		page ? (
+			<PageBlocks blocks={page.data.layout} currentSlug="home" />
+		) : (
+			<p class="text-center text-base-content/60">
+				No home page yet. Create a Page with the slug <code>home</code> in <a class="link" href="/_emdash/admin">the admin</a>.
+			</p>
+		)
+	}
+	<footer class="mt-10 text-center text-xs text-base-content/40">rser.me</footer>
+</Base>
