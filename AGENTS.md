@@ -52,10 +52,12 @@ rser.me: a link-in-bio + short-link site for Roger Stringer, mirroring linktr.ee
 | --------- | ------------- |
 | `/`       | The Page with slug `home`, rendered from its blocks |
 | `/[slug]` | 1) a Page with that slug; 2) else a Link block whose `short_slug` matches → 302 redirect; 3) else 404 |
+| `/r/[code]` | 302 to the `url` of the published `r` (short links) entry whose slug is `code`, else 404 (same as rogerstringer.com's `/r/`) |
 
 ## Schema
 
-- One collection: `pages` with `title` and `layout` (a `blocks` field, max 100 blocks).
+- `pages` with `title` and `layout` (a `blocks` field, max 100 blocks).
+- `r` (short links): entry slug is the code, `url` (required, unique) is the destination. Served by `src/pages/r/[code].astro`.
 - Block types (`seed/seed.json` → `blockTypes`, rendered by `src/components/blocks/*` via `src/components/PageBlocks.astro`):
   - `profile` (name, bio, avatar; avatar falls back to Settings → Logo, then `/public/avatar.jpg`)
   - `socials` (repeater: platform, url, label; icons from `simple-icons`)

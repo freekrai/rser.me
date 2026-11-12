@@ -85,8 +85,22 @@ export interface Page {
   terms?: Record<string, TaxonomyTerm[]>;
 }
 
+export interface R {
+  id: string;
+  slug: string | null;
+  status: string;
+  url: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
+  byline?: BylineSummary | null;
+  bylines?: ContentBylineCredit[];
+  terms?: Record<string, TaxonomyTerm[]>;
+}
+
 declare module "emdash" {
   interface EmDashCollections {
     pages: Page;
+    r: R;
   }
 }

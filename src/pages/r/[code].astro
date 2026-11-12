@@ -1,0 +1,19 @@
+---
+/**
+ * Short links: /r/{code} redirects to the `url` of the published entry in the
+ * `r` collection whose slug is the code (same as rogerstringer.com's /r/ route).
+ * Drafts and unpublished entries 404.
+ */
+import { decodeSlug, getEmDashEntry, sanitizeHref } from "emdash";
+
+const code = decodeSlug(Astro.params.code);
+if (!code) return Astro.rewrite("/404");
+
+const { entry: link, cacheHint } = await getEmDashEntry("r", code);
+const url = link?.data.url ? sanitizeHref(link.data.url) : null;
+// sanitizeHref returns "#" for anything unsafe (javascript: and friends).
+if (!url || url === "#") return Astro.rewrite("/404");
+
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+return Astro.redirect(url, 302);
+---

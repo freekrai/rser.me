@@ -257,6 +257,26 @@
 					}
 				}
 			]
+		},
+		{
+			"slug": "r",
+			"label": "short links",
+			"labelSingular": "short link",
+			"description": "Short URLs at /r/{slug}: the entry slug is the code, `url` is where it redirects. Only published links redirect.",
+			"supports": [
+				"drafts",
+				"revisions"
+			],
+			"urlPattern": "/r/{slug}",
+			"fields": [
+				{
+					"slug": "url",
+					"label": "Destination URL",
+					"type": "url",
+					"required": true,
+					"unique": true
+				}
+			]
 		}
 	],
 	"content": {
