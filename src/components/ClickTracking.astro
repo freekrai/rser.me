@@ -1,0 +1,66 @@
+---
+// GetButters browser tracking via @getbutters/js and the publishable key
+// (PUBLIC_BUTTERS_KEY, pk_...). Sends pageviews plus clicks on link pills,
+// social icons, About/Contact dialogs, and form submits. Short-link redirects
+// are tracked server side in src/utils/butters.ts.
+// Renders nothing (so nothing is sent) on localhost or without a key.
+import { publicKeyFor } from "../utils/butters";
+
+const key = publicKeyFor(Astro.url);
+---
+
+{key && <meta name="butters-key" content={key} />}
+
+<script>
+	import { init, track } from "@getbutters/js";
+
+	const key = document.querySelector<HTMLMetaElement>('meta[name="butters-key"]')?.content;
+
+	if (key) {
+		init({ key, pageviews: true });
+
+		let from = "";
+		try {
+			const ref = document.referrer ? new URL(document.referrer).hostname : "";
+			from = ref && ref !== location.hostname ? ref : "";
+		} catch {
+			/* ignore malformed referrers */
+		}
+		const meta = (extra: Record<string, unknown>) => ({ page: location.pathname, ...(from ? { referrer: from } : {}), ...extra });
+		const label = (el: HTMLElement) => (el.dataset.trackLabel || el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 120);
+
+		document.addEventListener(
+			"click",
+			(e) => {
+				const target = e.target as Element | null;
+
+				const dialogTrigger = target?.closest<HTMLElement>("[data-open-dialog]");
+				if (dialogTrigger) {
+					track("dialogs", label(dialogTrigger), { icon: "💬", metadata: meta({ dialog: dialogTrigger.dataset.openDialog }) });
+					return;
+				}
+
+				const link = target?.closest<HTMLAnchorElement>("main a[href]");
+				if (!link || (link.getAttribute("href") ?? "").startsWith("#")) return;
+				const social = link.closest('nav[aria-label="Social profiles"]');
+				track(social ? "socials" : "clicks", label(link), {
+					icon: social ? "🌐" : "👆",
+					url: link.href,
+					metadata: meta({ href: link.href }),
+				});
+			},
+			{ capture: true },
+		);
+
+		document.addEventListener(
+			"submit",
+			(e) => {
+				const form = e.target as HTMLFormElement | null;
+				if (!form?.matches("form.ec-form")) return;
+				const title = form.closest("dialog")?.querySelector("h2")?.textContent?.trim();
+				track("forms", title || "Form submitted", { icon: "✉️", metadata: meta({ form: form.dataset.formId }) });
+			},
+			{ capture: true },
+		);
+	}
+</script>

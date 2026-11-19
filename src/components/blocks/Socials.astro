@@ -18,6 +18,7 @@ const profiles = value.profiles ?? [];
 					target="_blank"
 					rel="me noopener noreferrer"
 					title={p.label || p.platform}
+					data-track-label={p.label || p.platform}
 				>
 					<span class="sr-only">{p.label || p.platform}</span>
 					<SocialIcon platform={p.platform} class="size-6" />

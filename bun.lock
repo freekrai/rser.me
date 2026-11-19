@@ -9,6 +9,7 @@
         "@astrojs/react": "^7.0.0",
         "@emdash-cms/cloudflare": "^1.5.0",
         "@emdash-cms/plugin-forms": "^0.2.13",
+        "@getbutters/js": "0.2.2",
         "astro": "^7.3.2",
         "emdash": "^1.5.0",
         "react": "19.2.4",
@@ -313,6 +314,8 @@
     "@floating-ui/react-dom": ["@floating-ui/react-dom@2.1.9", "", { "dependencies": { "@floating-ui/dom": "^1.8.0" }, "peerDependencies": { "react": ">=16.8.0", "react-dom": ">=16.8.0" } }, "sha512-JDjEFGCpImxDCA7JJKviA0M9+RtmJdj0m/NVU5IMgBK+AmZouAQQ7/+2GLH0GXXY0YMw9oXPB8hKdbPYg5QLYg=="],
 
     "@floating-ui/utils": ["@floating-ui/utils@0.2.12", "", {}, "sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww=="],
+
+    "@getbutters/js": ["@getbutters/js@0.2.2", "", {}, "sha512-cYhnjjgto+Im5f2l/L9ar7d1rMmvkwGkW941uke5YSjQm4R+MTTapk2ES/Zeb9vR7JWJrRS2UuJb2/NVx6R0yg=="],
 
     "@hono/node-server": ["@hono/node-server@2.1.7", "", { "peerDependencies": { "hono": "^4 || ^5.0.0-0" } }, "sha512-Wr0E6S+v2Bw9FkpGNP5BQ5QbJvclUa06UVehd65WFZe6XeJwbrKQQ5wPDevc0IC+QyzbO7v3Llh5uo45IZcSnA=="],
 

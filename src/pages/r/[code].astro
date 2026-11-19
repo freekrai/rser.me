@@ -5,6 +5,7 @@
  * Drafts and unpublished entries 404.
  */
 import { decodeSlug, getEmDashEntry, sanitizeHref } from "emdash";
+import { trackRedirect } from "../../utils/butters";
 
 const code = decodeSlug(Astro.params.code);
 if (!code) return Astro.rewrite("/404");
@@ -17,5 +18,6 @@ const url = link?.data.url ? sanitizeHref(link.data.url) : null;
 if (!url || url === "#") return Astro.rewrite("/404");
 
 if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+trackRedirect(Astro.request, `/r/${code}`, url, "r");
 return Astro.redirect(url, 302);
 ---

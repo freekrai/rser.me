@@ -72,6 +72,13 @@ rser.me: a link-in-bio + short-link site for Roger Stringer, mirroring linktr.ee
 - `@emdash-cms/plugin-forms` for forms/submissions; notifications via `cloudflareEmail()` (binding `EMAIL`, sender `forms@mail.rser.me`, Email Sending subdomain `mail.rser.me`).
 - Layout loads Lulu analytics and Datastar v1.0.5 (CDN). SSE helpers for Datastar partials live in `src/lib/datastar.ts`.
 
+## Analytics (GetButters)
+
+Events go to the GetButters project in `BUTTERS_PROJECT_ID`. Nothing is sent from localhost.
+- Browser (`src/components/ClickTracking.astro`, `@getbutters/js` with the publishable key `PUBLIC_BUTTERS_KEY`): pageviews, plus `clicks` (link pills), `socials`, `dialogs` (About/Contact opens) and `forms` (form submits). Labels come from `data-track-label`.
+- Server (`src/utils/butters.ts`, secret key `BUTTERS_API_KEY`, sent after the response via `waitUntil`): `short-links` for `/r/<code>` and Link-block short-link redirects, skipping bots and link-preview crawlers.
+- Keys live in `.env` locally and as Worker secrets in production (`bunx wrangler secret bulk`). Never commit them or expose `BUTTERS_API_KEY` to the browser.
+
 ## Deploy
 
 `bun run deploy` (astro build && wrangler deploy). Secrets via `bunx wrangler secret put`. If the site 503s with "Database migrations are required", inspect with `bunx emdash migrate --status --d1 rser` and follow https://docs.emdashcms.com/deployment/core-migrations/. Schema changes on the live site go through the admin/MCP (the seed only applies to an empty database).

@@ -4,6 +4,7 @@ import { EmDashHead, EmDashBodyStart, EmDashBodyEnd } from "emdash/ui";
 import { createPublicPageContext } from "emdash/page";
 import { Font } from "astro:assets";
 import { resolveStarterSiteIdentity } from "../utils/site-identity";
+import ClickTracking from "../components/ClickTracking.astro";
 import "../styles/global.css";
 
 interface Props {
@@ -95,6 +96,7 @@ const clouds = [
 				<slot />
 			</main>
 		</div>
+		<ClickTracking />
 		<EmDashBodyEnd page={pageCtx} />
 	</body>
 </html>

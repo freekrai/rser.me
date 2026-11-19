@@ -4,6 +4,7 @@ import Base from "../layouts/Base.astro";
 import PageBlocks from "../components/PageBlocks.astro";
 import { resolveStarterSiteIdentity } from "../utils/site-identity";
 import { resolveShortLink } from "../utils/short-links";
+import { trackRedirect } from "../utils/butters";
 
 // rser.me/<slug> resolves in this order:
 //   1. a published Page with that slug  -> rendered (e.g. /about)
@@ -17,6 +18,7 @@ const { entry: page, cacheHint } = await getEmDashEntry("pages", slug);
 if (!page) {
 	const destination = await resolveShortLink(slug);
 	if (destination) {
+		trackRedirect(Astro.request, `/${slug}`, destination, "block");
 		return new Response(null, { status: 302, headers: { Location: destination, "Cache-Control": "no-store" } });
 	}
 	return Astro.rewrite("/404");

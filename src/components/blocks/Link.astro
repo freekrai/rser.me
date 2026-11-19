@@ -23,6 +23,7 @@ const external = /^https?:\/\//i.test(value.url);
 			target={external ? "_blank" : undefined}
 			rel={external ? "noopener noreferrer" : undefined}
 			title={value.description || undefined}
+			data-track-label={value.title}
 			class="relative mb-4 flex min-h-14 items-center justify-center rounded-full border border-primary/80 bg-base-100 px-14 py-4 text-center shadow-[0_0_5px_color-mix(in_oklab,var(--color-primary)_25%,transparent)] transition hover:border-primary hover:bg-base-200 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
 		>
 			{value.thumbnail && (
