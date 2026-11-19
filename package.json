@@ -15,12 +15,12 @@
     "typecheck": "astro check"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^14.3.1",
-    "@astrojs/react": "^7.0.0",
+    "@astrojs/cloudflare": "^14.4.8",
+    "@astrojs/react": "^7.1.9",
     "@emdash-cms/cloudflare": "^1.5.0",
     "@emdash-cms/plugin-forms": "^0.2.13",
     "@getbutters/js": "0.2.2",
-    "astro": "^7.3.2",
+    "astro": "^7.4.12",
     "emdash": "^1.5.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -28,11 +28,11 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@cloudflare/workers-types": "^5.20260820.1",
+    "@cloudflare/workers-types": "^5.20261118.1",
     "@tailwindcss/vite": "^4.3.5",
     "daisyui": "^5.7.50",
     "tailwindcss": "^4.3.5",
-    "wrangler": "^4.125.0"
+    "wrangler": "^4.164.0"
   },
   "packageManager": "bun@1.4.4",
   "trustedDependencies": [
