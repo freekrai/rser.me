@@ -44,7 +44,11 @@ This template ships with `.mcp.json`, `.cursor/mcp.json`, and `.vscode/mcp.json`
 
 ## This Site
 
-rser.me: a link-in-bio + short-link site for Roger Stringer, mirroring linktr.ee/codedgeekery. Tailwind CSS 4 + daisyUI 5, Geist font, styled after the `linktree-astro` layout (blue-50 page, wave/cloud backdrop, white pill links). Deployed to Cloudflare Workers (D1 `rser`, R2 `rser-media`) at rser.me; `www` 301s to the apex in `src/worker.ts`. **Use bun only** (no npm/pnpm).
+rser.me is an open-source (MIT) link-in-bio and short-link site. It uses Tailwind CSS 4, daisyUI 5 and the Geist font: a blue-50 page, a wave and cloud backdrop, and white pill links. It deploys to Cloudflare Workers (D1 `rser`, R2 `rser-media`) at rser.me, and `www` 301s to the apex in `src/worker.ts`. `README.md` covers setup and the files a fork changes.
+
+**Use bun only** (never npm or pnpm). `bunfig.toml` enforces a 24-hour `minimumReleaseAge`, with EmDash packages exempt. If `bun install` refuses a version, keep the previous range rather than removing the safeguard.
+
+The repo is public. Never commit `.env`, secrets or account IDs. `.env.example` lists the variables.
 
 ## Pages
 
@@ -52,7 +56,7 @@ rser.me: a link-in-bio + short-link site for Roger Stringer, mirroring linktr.ee
 | --------- | ------------- |
 | `/`       | The Page with slug `home`, rendered from its blocks |
 | `/[slug]` | 1) a Page with that slug; 2) else a Link block whose `short_slug` matches → 302 redirect; 3) else 404 |
-| `/r/[code]` | 302 to the `url` of the published `r` (short links) entry whose slug is `code`, else 404 (same as rogerstringer.com's `/r/`) |
+| `/r/[code]` | 302 to the `url` of the published `r` (short links) entry whose slug is `code`, else 404. Also tries the slug with a leading `/`, since the admin accepts one |
 
 ## Schema
 
@@ -77,8 +81,8 @@ rser.me: a link-in-bio + short-link site for Roger Stringer, mirroring linktr.ee
 Events go to the GetButters project in `BUTTERS_PROJECT_ID`. Nothing is sent from localhost.
 - Browser (`src/components/ClickTracking.astro`, `@getbutters/js` with the publishable key `PUBLIC_BUTTERS_KEY`): pageviews, plus `clicks` (link pills), `socials`, `dialogs` (About/Contact opens) and `forms` (form submits). Labels come from `data-track-label`.
 - Server (`src/utils/butters.ts`, secret key `BUTTERS_API_KEY`, sent after the response via `waitUntil`): `short-links` for `/r/<code>` and Link-block short-link redirects, skipping bots and link-preview crawlers.
-- Keys live in `.env` locally and as Worker secrets in production (`bunx wrangler secret bulk`). Never commit them or expose `BUTTERS_API_KEY` to the browser.
+- Keys live in `.env` locally and as Worker secrets in production. All three are optional: without them nothing is tracked. Never commit them or expose `BUTTERS_API_KEY` to the browser. The publishable key is origin-restricted in GetButters.
 
 ## Deploy
 
-`bun run deploy` (astro build && wrangler deploy). Secrets via `bunx wrangler secret put`. If the site 503s with "Database migrations are required", inspect with `bunx emdash migrate --status --d1 rser` and follow https://docs.emdashcms.com/deployment/core-migrations/. Schema changes on the live site go through the admin/MCP (the seed only applies to an empty database).
+`bun run deploy` (astro build && wrangler deploy). Production also deploys through Workers Builds on every push to `main`, and only the owner can push to `main`. Secrets via `bunx wrangler secret put`. If the site 503s with "Database migrations are required", inspect with `bunx emdash migrate --status --d1 rser` and follow https://docs.emdashcms.com/deployment/core-migrations/. Schema changes on the live site go through the admin/MCP (the seed only applies to an empty database).

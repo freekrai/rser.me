@@ -13,8 +13,8 @@
 		// Setup, passkeys, sitemaps and email links use this origin.
 		"EMDASH_SITE_URL": "https://rser.me",
 	},
-	// GetButters tracking: BUTTERS_API_KEY, BUTTERS_PROJECT_ID, PUBLIC_BUTTERS_KEY and
-	// BUTTERS_IDENTITY_SECRET are Worker secrets (from .env via `wrangler secret bulk`).
+	// Optional GetButters tracking: BUTTERS_API_KEY, BUTTERS_PROJECT_ID and PUBLIC_BUTTERS_KEY
+	// are Worker secrets (`bunx wrangler secret put <NAME>`). Without them nothing is tracked.
 	"observability": { "enabled": true },
 	"d1_databases": [
 		{
