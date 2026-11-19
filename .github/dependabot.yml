@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: bun
+    directory: /
+    schedule:
+      interval: weekly
+    # Match bunfig.toml's 24-hour minimumReleaseAge.
+    cooldown:
+      default-days: 1
+    # Upgrade EmDash with `bunx upgrade-emdash@latest` instead (it also refreshes skills and migrations).
+    ignore:
+      - dependency-name: "emdash"
+      - dependency-name: "@emdash-cms/*"
+    groups:
+      astro-and-cloudflare:
+        patterns: ["astro", "@astrojs/*", "wrangler", "@cloudflare/*"]
+      styling:
+        patterns: ["tailwindcss", "@tailwindcss/*", "daisyui"]
+    open-pull-requests-limit: 5

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: EmDash help
+    url: https://github.com/emdash-cms/emdash/discussions
+    about: Questions about the EmDash CMS itself.
+  - name: EmDash docs
+    url: https://docs.emdashcms.com
+    about: Setup, schema, plugins and deployment guides.
+  - name: Astro help
+    url: https://astro.build/chat/
+    about: Questions about Astro.

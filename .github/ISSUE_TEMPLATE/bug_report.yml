@@ -1,0 +1,41 @@
+name: 🐛 Bug report
+description: Something on rser.me or in this code isn't working.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! This is a personal project, so responses may take a while.
+        Questions about EmDash itself belong in the [EmDash repo](https://github.com/emdash-cms/emdash/discussions).
+  - type: dropdown
+    attributes:
+      label: Where did it happen?
+      options:
+        - The live site (rser.me)
+        - My own fork / deployment
+        - Local development
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Commit or version
+      description: The commit SHA you're running, if it's a fork or local copy.
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to ...
+        2. Click ...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual behaviour
+      description: Include any error output from the browser console, `wrangler tail` or the build.
+    validations:
+      required: true
