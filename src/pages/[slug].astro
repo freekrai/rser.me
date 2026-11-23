@@ -21,6 +21,8 @@ if (!page) {
 		trackRedirect(Astro.request, `/${slug}`, destination, "block");
 		return new Response(null, { status: 302, headers: { Location: destination, "Cache-Control": "no-store" } });
 	}
+	// Publishing the page purges a cached 404 through this hint.
+	if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 	return Astro.rewrite("/404");
 }
 

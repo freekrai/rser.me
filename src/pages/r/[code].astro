@@ -14,10 +14,11 @@ if (!code) return Astro.rewrite("/404");
 let { entry: link, cacheHint } = await getEmDashEntry("r", code);
 if (!link) ({ entry: link, cacheHint } = await getEmDashEntry("r", `/${code}`));
 const url = link?.data.url ? sanitizeHref(link.data.url) : null;
+// Set before the 404 too, so publishing the short link purges a cached miss.
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 // sanitizeHref returns "#" for anything unsafe (javascript: and friends).
 if (!url || url === "#") return Astro.rewrite("/404");
 
-if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 trackRedirect(Astro.request, `/r/${code}`, url, "r");
 return Astro.redirect(url, 302);
 ---
